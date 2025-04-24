@@ -1,61 +1,88 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# نظام متابعة تقدم الموظفين في الدورات التدريبية
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+نظام يسمح للموظفين بالتسجيل في الدورات التدريبية، ومتابعة تقدمهم، وإجراء الاختبارات، والحصول على شهادات بعد إتمام الدورة.
 
-## About Laravel
+## المتطلبات
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP >= 8.0
+- Laravel 12.x
+- MySQL
+- Composer
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+2. تثبيت المتطلبات:
+```bash
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. إنشاء ملف البيئة:
+```bash
+cp .env.example .env
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4. تعديل ملف .env وإضافة معلومات قاعدة البيانات
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. إنشاء مفتاح التطبيق:
+```bash
+php artisan key:generate
+```
 
-## Laravel Sponsors
+6. إنشاء مفتاح JWT:
+```bash
+php artisan jwt:secret
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+7. تنفيذ الهجرات:
+```bash
+php artisan migrate
+```
 
-### Premium Partners
+## نقاط النهاية API
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+### المصادقة
+- تسجيل مستخدم جديد: `POST /api/auth/register`
+- تسجيل الدخول: `POST /api/auth/login`
+- تسجيل الخروج: `POST /api/auth/logout`
+- تحديث التوكن: `POST /api/auth/refresh`
+- بيانات المستخدم: `GET /api/auth/me`
 
-## Contributing
+### الموظفين
+- قائمة الموظفين: `GET /api/employees`
+- إضافة موظف: `POST /api/employees`
+- عرض موظف: `GET /api/employees/{id}`
+- تحديث موظف: `PUT /api/employees/{id}`
+- حذف موظف: `DELETE /api/employees/{id}`
+- دورات الموظف: `GET /api/employees/{id}/courses`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### الدورات التدريبية
+- قائمة الدورات: `GET /api/courses`
+- إضافة دورة: `POST /api/courses`
+- عرض دورة: `GET /api/courses/{id}`
+- تحديث دورة: `PUT /api/courses/{id}`
+- حذف دورة: `DELETE /api/courses/{id}`
+- موظفي الدورة: `GET /api/courses/{id}/employees`
+- تسجيل موظف في دورة: `POST /api/courses/{id}/enroll`
 
-## Code of Conduct
+### الدروس
+- قائمة دروس الدورة: `GET /api/courses/{course}/lessons`
+- إضافة درس: `POST /api/courses/{course}/lessons`
+- عرض درس: `GET /api/courses/{course}/lessons/{id}`
+- تحديث درس: `PUT /api/courses/{course}/lessons/{id}`
+- حذف درس: `DELETE /api/courses/{course}/lessons/{id}`
+- إعادة ترتيب الدروس: `POST /api/courses/{course}/lessons/reorder`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### الاختبارات
+- قائمة اختبارات الدورة: `GET /api/courses/{course}/quizzes`
+- إضافة اختبار: `POST /api/courses/{course}/quizzes`
+- عرض اختبار: `GET /api/courses/{course}/quizzes/{id}`
+- تحديث اختبار: `PUT /api/courses/{course}/quizzes/{id}`
+- حذف اختبار: `DELETE /api/courses/{course}/quizzes/{id}`
+- تقديم إجابات: `POST /api/courses/{course}/quizzes/{id}/submit`
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### الأسئلة
+- قائمة أسئلة الاختبار: `GET /api/courses/{course}/quizzes/{quiz}/questions`
+- إضافة سؤال: `POST /api/courses/{course}/quizzes/{quiz}/questions`
+- عرض سؤال: `GET /api/courses/{course}/quizzes/{quiz}/questions/{id}`
+- تحديث سؤال: `PUT /api/courses/{course}/quizzes/{quiz}/questions/{id}`
+- حذف سؤال: `DELETE /api/courses/{course}/quizzes/{quiz}/questions/{id}`
